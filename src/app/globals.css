@@ -1,0 +1,284 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   NOCTURNE — design tokens
+   Cold blue-black paper, one warm amber signal. Cold night, warm light.
+   Semantic variables (--bg, --ink, --accent …) flip with [data-theme];
+   @theme inline maps them onto Tailwind utilities (bg-background, text-ink …).
+   ========================================================================== */
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--border);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-contrast: var(--accent-contrast);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono", Menlo, Consolas, monospace;
+
+  /* Fluid display sizes → generate .text-display and .text-quote utilities. */
+  --text-display: clamp(2rem, 1.1rem + 4vw, 3rem);
+  --text-quote: clamp(2.15rem, 1rem + 5.2vw, 4.4rem);
+
+  --radius-card: 16px;
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* -------- Dark (default) ------------------------------------------------- */
+:root {
+  color-scheme: dark;
+
+  --bg: #0a0c11;
+  --surface: #12151d;
+  --surface-2: #171b24;
+  --border: #232833;
+  --ink: #e8e6e1;
+  --muted: #8b93a3;
+  --faint: #7d8496; /* meets AA (>=4.5:1) for small text on --bg */
+  --accent: #e0a15e;
+  --accent-strong: #eab173;
+  --accent-contrast: #140f08;
+
+  --hatch: color-mix(in srgb, var(--ink) 4%, transparent);
+  --ring: color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+/* -------- Light ---------------------------------------------------------- */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #fbfbf9;
+  --surface: #ffffff;
+  --surface-2: #f4f3ef;
+  --border: #e4e2dc;
+  --ink: #16181d;
+  --muted: #5c6473;
+  --faint: #6b7280; /* meets AA (>=4.5:1) for small text on --bg */
+  --accent: #b4763a;
+  --accent-strong: #9d6530;
+  --accent-contrast: #201404; /* dark label keeps AA on the amber button */
+
+  --hatch: color-mix(in srgb, var(--ink) 5%, transparent);
+  --ring: color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg);
+    /* Faint diagonal hatch — shows only in the page gutters, behind the
+       solid-background content frame. This is the quiet supporting texture. */
+    background-image: repeating-linear-gradient(
+      135deg,
+      transparent 0,
+      transparent 7px,
+      var(--hatch) 7px,
+      var(--hatch) 8px
+    );
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv01", "ss01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--accent) 28%, transparent);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* ==========================================================================
+   Reusable pieces
+   ========================================================================== */
+
+@layer components {
+  /* The centered content frame; hatch shows in the gutters around it. */
+  .frame {
+    width: 100%;
+    max-width: 46rem; /* ~736px content column */
+    margin-inline: auto;
+    background-color: var(--bg);
+    border-inline: 1px solid var(--border);
+  }
+
+  /* Small mono uppercase micro-label above each section. */
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Body prose with accent inline links. */
+  .prose-body {
+    color: color-mix(in srgb, var(--ink) 82%, var(--bg));
+    line-height: 1.68;
+    font-size: 1.02rem;
+  }
+  /* Underlined so links are distinguishable by more than colour (WCAG),
+     and coloured with --accent-strong so they meet AA in light mode too. */
+  .prose-body a {
+    color: var(--accent-strong);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    text-decoration-color: color-mix(in srgb, var(--accent) 50%, transparent);
+    transition: text-decoration-color 0.2s var(--ease-out-quart), color 0.2s;
+  }
+  .prose-body a:hover {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
+  }
+
+  /* Italic Fraunces routed to its own (non-preloaded) family. The file already
+     carries italic glyphs, so font-style stays normal. */
+  .font-serif-italic {
+    font-family: var(--font-fraunces-italic), ui-serif, Georgia, serif;
+    font-style: normal;
+  }
+
+  /* The signature display quote. */
+  .display-quote {
+    font-family: var(--font-fraunces-italic), ui-serif, Georgia, serif;
+    font-style: normal;
+    font-optical-sizing: auto;
+    font-size: var(--text-quote);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  /* Filled + ghost buttons. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1;
+    transition: transform 0.2s var(--ease-out-quart),
+      background-color 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-contrast);
+  }
+  .btn-primary:hover {
+    background: var(--accent-strong);
+    transform: translateY(-1px);
+  }
+  .btn-ghost {
+    border: 1px solid var(--border);
+    color: var(--ink);
+    background: transparent;
+  }
+  .btn-ghost:hover {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  /* Icon button (header controls). */
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    transition: color 0.2s, border-color 0.2s, background-color 0.2s,
+      transform 0.2s var(--ease-out-quart);
+  }
+  .icon-btn:hover {
+    color: var(--ink);
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    transform: translateY(-1px);
+  }
+}
+
+/* ==========================================================================
+   Motion — one orchestrated load reveal, then restraint.
+   ========================================================================== */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer utilities {
+  /* Applied to hero children; staggered via inline --i on the element. */
+  .reveal {
+    opacity: 0;
+    animation: rise-in 0.7s var(--ease-out-quart) forwards;
+    animation-delay: calc(var(--i, 0) * 90ms + 60ms);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    animation: none;
+  }
+}
