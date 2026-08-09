@@ -3,6 +3,7 @@ import { site } from "@/content/site.config";
 import { fontVariables } from "./fonts";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Footer } from "@/components/Footer";
+import { ScrollReveal } from "@/components/ScrollReveal";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -61,6 +62,20 @@ const themeScript = `
   } catch (e) {
     document.documentElement.setAttribute('data-theme', 'dark');
   }
+  // Flag the document ready for scroll-reveal — but only when motion is
+  // allowed. Without this class, [data-reveal] elements are never hidden, so
+  // no-JS and reduced-motion visitors always see fully visible content.
+  try {
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('reveal-ready');
+      // Safety net: if the reveal controller never activates (hydration or JS
+      // failure), un-hide everything after a moment so content can NEVER stay
+      // invisible. ScrollReveal clears this the instant it mounts.
+      window.__revealFallback = setTimeout(function () {
+        document.documentElement.classList.remove('reveal-ready');
+      }, 1600);
+    }
+  } catch (e) {}
 })();
 `;
 
@@ -84,6 +99,7 @@ export default function RootLayout({
           {children}
           <Footer />
         </div>
+        <ScrollReveal />
       </body>
     </html>
   );

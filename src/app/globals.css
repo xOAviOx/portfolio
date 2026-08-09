@@ -257,12 +257,57 @@
   }
 }
 
+/* One contribution column of the GitHub graph fading up — used for the
+   left-to-right sweep when the graph scrolls into view. */
+@keyframes gh-col-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @layer utilities {
   /* Applied to hero children; staggered via inline --i on the element. */
   .reveal {
     opacity: 0;
     animation: rise-in 0.7s var(--ease-out-quart) forwards;
     animation-delay: calc(var(--i, 0) * 90ms + 60ms);
+  }
+
+  /* ---- Scroll reveal --------------------------------------------------
+     Elements marked [data-reveal] start hidden and rise into place when an
+     IntersectionObserver adds .is-visible. The hidden state is gated on
+     html.reveal-ready — a class the pre-paint script only adds when JS is on
+     and motion isn't reduced — so no-JS and reduced-motion visitors always
+     get fully visible content with no flash. Stagger via inline
+     --reveal-delay on grouped items. */
+  html.reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(var(--reveal-y, 18px));
+    transition: opacity 0.65s var(--ease-out-quart),
+      transform 0.65s var(--ease-out-quart);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+  html.reveal-ready [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+    /* Drop the compositor hint once revealed — the effect is one-time. */
+    will-change: auto;
+  }
+
+  /* GitHub graph sweep: each week column animates in, offset by its index
+     (inline --col-delay), but only once the graph itself is revealed. */
+  html.reveal-ready .gh-col {
+    opacity: 0;
+  }
+  html.reveal-ready [data-reveal].is-visible .gh-col {
+    animation: gh-col-in 0.5s var(--ease-out-quart) both;
+    animation-delay: var(--col-delay, 0ms);
   }
 }
 
@@ -280,5 +325,15 @@
   .reveal {
     opacity: 1;
     animation: none;
+  }
+  /* Belt-and-suspenders: even if reveal-ready were present, never leave
+     scroll-reveal content hidden for reduced-motion users. */
+  html.reveal-ready [data-reveal],
+  html.reveal-ready [data-reveal].is-visible,
+  html.reveal-ready .gh-col {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
   }
 }

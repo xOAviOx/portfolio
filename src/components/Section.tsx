@@ -30,7 +30,10 @@ export function Section({
       aria-labelledby={id && label ? `${id}-label` : undefined}
     >
       {label && (
-        <div className="mb-6 flex items-baseline justify-between gap-4">
+        <div
+          data-reveal
+          className="mb-6 flex items-baseline justify-between gap-4"
+        >
           <h2 id={id ? `${id}-label` : undefined} className="section-label">
             {label}
           </h2>
@@ -38,7 +41,10 @@ export function Section({
         </div>
       )}
       {description && (
-        <p className="mb-8 -mt-2 max-w-prose text-[0.95rem] text-muted">
+        <p
+          data-reveal
+          className="mb-8 -mt-2 max-w-prose text-[0.95rem] text-muted"
+        >
           {description}
         </p>
       )}

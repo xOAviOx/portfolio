@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { site, type Project } from "@/content/site.config";
 import { Section } from "@/components/Section";
 import { ArrowUpRight, GithubIcon } from "@/components/icons";
@@ -50,14 +51,21 @@ function ProjectLinks({ project }: { project: Project }) {
   );
 }
 
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({ project, index }: { project: Project; index: number }) {
   const primaryHref = project.liveUrl ?? project.repoUrl;
   const featured = project.featured;
 
   return (
+    // Outer wrapper owns the masonry placement + scroll-reveal (and its stagger
+    // delay), so the inner card's hover transform stays instant and un-delayed.
+    <div
+      data-reveal
+      style={{ "--reveal-delay": `${Math.min(index, 5) * 55}ms` } as CSSProperties}
+      className={`mb-4 break-inside-avoid ${featured ? "[column-span:_all]" : ""}`}
+    >
     <article
-      className={`group mb-4 flex break-inside-avoid flex-col overflow-hidden rounded-[16px] border border-line bg-surface transition-all duration-300 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--accent)_45%,var(--border))] ${
-        featured ? "sm:flex-row [column-span:_all]" : ""
+      className={`group flex h-full flex-col overflow-hidden rounded-[16px] border border-line bg-surface transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-[color-mix(in_srgb,var(--accent)_45%,var(--border))] hover:shadow-[0_14px_40px_-24px_color-mix(in_srgb,var(--accent)_55%,transparent)] ${
+        featured ? "sm:flex-row" : ""
       }`}
     >
       {project.image && (
@@ -100,6 +108,7 @@ function ProjectCard({ project }: { project: Project }) {
         <TagList tags={project.tags} />
       </div>
     </article>
+    </div>
   );
 }
 
@@ -110,8 +119,8 @@ export function Projects() {
   return (
     <Section id="work" label={projects.label} description={projects.description}>
       <div className="sm:columns-2 [column-gap:1rem]">
-        {projects.items.map((project) => (
-          <ProjectCard key={project.title} project={project} />
+        {projects.items.map((project, i) => (
+          <ProjectCard key={project.title} project={project} index={i} />
         ))}
       </div>
     </Section>

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { site, type ExperienceItem } from "@/content/site.config";
 import { Section } from "@/components/Section";
 import { ArrowUpRight } from "@/components/icons";
@@ -11,12 +12,18 @@ import { ArrowUpRight } from "@/components/icons";
 function ExperienceEntry({
   item,
   isLast,
+  index,
 }: {
   item: ExperienceItem;
   isLast: boolean;
+  index: number;
 }) {
   return (
-    <li className="relative pb-9 pl-8 last:pb-0">
+    <li
+      data-reveal
+      className="relative pb-9 pl-8 last:pb-0"
+      style={{ "--reveal-delay": `${Math.min(index, 4) * 60}ms` } as CSSProperties}
+    >
       {/* Rail: connects this node to the next entry. */}
       {!isLast && (
         <span
@@ -114,6 +121,7 @@ export function Experience() {
             key={`${item.company}-${item.role}`}
             item={item}
             isLast={i === experience.items.length - 1}
+            index={i}
           />
         ))}
       </ol>

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { site } from "@/content/site.config";
 import { Section } from "@/components/Section";
 import { getContributions, type ContribDay } from "@/lib/github";
@@ -59,6 +60,8 @@ export async function GitHubContributions() {
     >
       <div className="overflow-x-auto pb-1">
         <div
+          data-reveal
+          style={{ ["--reveal-y"]: "0px" } as CSSProperties}
           className="inline-flex min-w-max flex-col"
           role="img"
           aria-label={
@@ -79,7 +82,11 @@ export async function GitHubContributions() {
           {/* Week columns */}
           <div className="flex" style={{ gap: GAP }}>
             {data.weeks.map((week, wi) => (
-              <div key={wi} className="flex flex-col" style={{ gap: GAP }}>
+              <div
+                key={wi}
+                className="gh-col flex flex-col"
+                style={{ gap: GAP, ["--col-delay"]: `${wi * 11}ms` } as CSSProperties}
+              >
                 {week.map((day) => (
                   <span
                     key={day.date}
@@ -94,7 +101,10 @@ export async function GitHubContributions() {
       </div>
 
       {/* Total + legend */}
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+      <div
+        data-reveal
+        className="mt-4 flex flex-wrap items-center justify-between gap-3"
+      >
         <p className="text-sm text-muted">
           {summary}
           {data.isFallback && (

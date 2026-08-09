@@ -5,7 +5,7 @@ import { ArrowUpRight } from "./icons";
 /** A single blog row, shared by the home Writing section and the /blog list. */
 export function PostRow({ post }: { post: PostMeta }) {
   return (
-    <li>
+    <li data-reveal>
       <Link
         href={`/blog/${post.slug}`}
         className="group flex items-center justify-between gap-5 py-5"

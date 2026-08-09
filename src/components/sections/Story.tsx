@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { site } from "@/content/site.config";
 import { Section } from "@/components/Section";
 import { RichText } from "@/components/RichText";
@@ -11,7 +12,12 @@ export function Story() {
     <Section id="about" label={story.label}>
       <div className="max-w-prose space-y-4">
         {story.paragraphs.map((paragraph, i) => (
-          <p key={i} className="prose-body">
+          <p
+            key={i}
+            data-reveal
+            className="prose-body"
+            style={{ "--reveal-delay": `${i * 70}ms` } as CSSProperties}
+          >
             <RichText value={paragraph} />
           </p>
         ))}
@@ -20,6 +26,7 @@ export function Story() {
       {story.resume && (
         <a
           href={story.resume.href}
+          data-reveal
           className="btn btn-ghost mt-8"
           {...(story.resume.external
             ? { target: "_blank", rel: "noreferrer noopener" }

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { site } from "@/content/site.config";
 import { Section } from "@/components/Section";
 import { RichText } from "@/components/RichText";
@@ -9,15 +10,26 @@ export function Contact() {
   return (
     <Section id="contact" label={contact.label}>
       <div className="max-w-prose">
-        <p className="font-serif text-[1.6rem] leading-[1.2] tracking-tight sm:text-[2.1rem]">
+        <p
+          data-reveal
+          className="font-serif text-[1.6rem] leading-[1.2] tracking-tight sm:text-[2.1rem]"
+        >
           {contact.headline}
         </p>
 
-        <p className="prose-body mt-5">
+        <p
+          data-reveal
+          className="prose-body mt-5"
+          style={{ "--reveal-delay": "80ms" } as CSSProperties}
+        >
           <RichText value={contact.description} />
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
+        <div
+          data-reveal
+          className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3"
+          style={{ "--reveal-delay": "160ms" } as CSSProperties}
+        >
           <a
             href={contact.cta.href}
             className="btn btn-primary"
@@ -35,7 +47,11 @@ export function Contact() {
           </a>
         </div>
 
-        <div className="mt-9">
+        <div
+          data-reveal
+          className="mt-9"
+          style={{ "--reveal-delay": "220ms" } as CSSProperties}
+        >
           <SocialLinks iconSize={18} />
         </div>
       </div>

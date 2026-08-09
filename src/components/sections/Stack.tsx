@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { site } from "@/content/site.config";
 import { Section } from "@/components/Section";
 
@@ -13,9 +14,11 @@ export function Stack() {
   return (
     <Section id="stack" label={stack.label} description={stack.description}>
       <div className="space-y-6">
-        {stack.groups.map((group) => (
+        {stack.groups.map((group, gi) => (
           <div
             key={group.category}
+            data-reveal
+            style={{ "--reveal-delay": `${gi * 70}ms` } as CSSProperties}
             className="grid gap-2 sm:grid-cols-[130px_1fr] sm:gap-6"
           >
             <h3 className="section-label pt-2">{group.category}</h3>
@@ -23,7 +26,7 @@ export function Stack() {
               {group.items.map((item) => (
                 <li
                   key={item.name}
-                  className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-1.5 text-sm text-ink transition-colors hover:border-[color-mix(in_srgb,var(--accent)_45%,var(--border))]"
+                  className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-1.5 text-sm text-ink transition-[transform,border-color,background-color] duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--accent)_45%,var(--border))] hover:bg-surface-2"
                 >
                   {item.icon && (
                     <Image
