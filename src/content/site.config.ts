@@ -301,7 +301,7 @@ export const site: SiteConfig = {
         role: "Co-Founder",
         company: "Sunniva AI",
         companyUrl: "https://sunniva.info",
-        period: "Mar 2025 — Present",
+        period: "Mar 2026 — Present",
         location: "Remote",
         description:
           "Part of the founding team at Sunniva AI, working across technical implementation, business operations, client acquisition, recruitment, and project delivery.",
@@ -310,7 +310,6 @@ export const site: SiteConfig = {
           "Coordinated across sales, recruitment, client delivery, and technical implementation as an early-stage team.",
           "Helping businesses improve lead handling, customer support, and operational efficiency through AI-powered automation.",
         ],
-        tags: ["AI", "Voice Agents", "Automation", "Node.js", "Python"],
       },
       {
         role: "Back End Developer",
@@ -324,7 +323,6 @@ export const site: SiteConfig = {
           "Designed and managed data layers with PostgreSQL for relational storage and Redis for caching, sessions, and fast lookups.",
           "Built scalable, reliable server-side infrastructure to support the product as it grows.",
         ],
-        tags: ["Node.js", "Python", "PostgreSQL", "Redis"],
       },
       {
         role: "Co-Founder",
@@ -338,7 +336,6 @@ export const site: SiteConfig = {
           "Created and sold a library of website templates, turning one-off design work into a repeatable, scalable product.",
           "Handled the full client lifecycle solo: sales, design, development, and delivery.",
         ],
-        tags: ["Next.js", "React", "Tailwind CSS", "Figma"],
       },
       {
         role: "Frontend Developer Intern",
@@ -347,7 +344,6 @@ export const site: SiteConfig = {
         location: "Remote",
         description:
           "Built frontend interfaces and contributed to web development projects across a part-time internship.",
-        tags: ["Web Development", "Python", "JavaScript"],
       },
       {
         role: "Full Stack Developer",
@@ -359,7 +355,6 @@ export const site: SiteConfig = {
         highlights: [
           "Built modular, reusable UI components and ensured responsiveness across devices.",
         ],
-        tags: ["Next.js", "React.js", "Full Stack"],
       },
       {
         role: "Web Development Intern",
@@ -371,7 +366,6 @@ export const site: SiteConfig = {
         highlights: [
           "Improved website usability and performance through debugging and optimisation.",
         ],
-        tags: ["HTML5", "CSS", "JavaScript", "Full-Stack Development"],
       },
       {
         role: "Full-Stack Developer",
@@ -380,7 +374,6 @@ export const site: SiteConfig = {
         location: "Remote",
         description:
           "Built and optimised both frontend and backend features using modern JavaScript technologies, integrated APIs and handled database operations.",
-        tags: ["JavaScript", "Node.js", "APIs"],
       },
     ],
   },
