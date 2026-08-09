@@ -235,19 +235,19 @@ export const site: SiteConfig = {
     name: "Avi Shukla",
     title: "Avi Shukla — Software Engineer | AI-Native Builder",
     description:
-      "[One or two sentences describing who you are and what you build. This is your search + social preview text.]",
+      "Avi Shukla is a software engineer who builds full-stack products end to end: frontend, backend, and the infrastructure underneath. Creator of Maestro, Gantry, and aicut; engineering at Sunniva AI.",
     url: "https://example.com",
     locale: "en_US",
     ogAlt: "Avi Shukla — Software Engineer | AI-Native Builder",
-    twitter: "@yourhandle",
+    twitter: "@CircuitSage_",
   },
 
   socials: [
     { platform: "github", label: "GitHub", href: "https://github.com/xOAviOx", handle: "@xOAviOx" },
     { platform: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/in/avi-shukla-ba24a6213/" },
     { platform: "x", label: "X", href: "https://x.com/CircuitSage_", handle: "@CircuitSage_" },
-    { platform: "email", label: "Email", href: "mailto:avishuklacode@gmail.com" },
-    { platform: "resume", label: "Résumé", href: "/resume.pdf", external: true },
+    { platform: "email", label: "Email", href: "mailto:avishuklawork@gmail.com" },
+    { platform: "resume", label: "Résumé", href: "/resume.pdf" },
   ],
 
   hero: {

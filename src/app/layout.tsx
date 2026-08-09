@@ -71,7 +71,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={fontVariables}>
+      <body className={fontVariables} suppressHydrationWarning>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <a
           href="#main"
