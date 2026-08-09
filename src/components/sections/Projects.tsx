@@ -56,8 +56,8 @@ function ProjectCard({ project }: { project: Project }) {
 
   return (
     <article
-      className={`group flex flex-col overflow-hidden rounded-[16px] border border-line bg-surface transition-all duration-300 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--accent)_45%,var(--border))] ${
-        featured ? "sm:col-span-2 sm:flex-row" : ""
+      className={`group mb-4 flex break-inside-avoid flex-col overflow-hidden rounded-[16px] border border-line bg-surface transition-all duration-300 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--accent)_45%,var(--border))] ${
+        featured ? "sm:flex-row [column-span:_all]" : ""
       }`}
     >
       {project.image && (
@@ -109,7 +109,7 @@ export function Projects() {
 
   return (
     <Section id="work" label={projects.label} description={projects.description}>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="sm:columns-2 [column-gap:1rem]">
         {projects.items.map((project) => (
           <ProjectCard key={project.title} project={project} />
         ))}

@@ -380,40 +380,73 @@ export const site: SiteConfig = {
 
   projects: {
     label: "Proof of Work",
-    description: "[A short line framing the projects below.]",
+    description: "Developer tooling, AI systems, and a few things I built because they needed to exist.",
     items: [
       {
-        title: "[Flagship Project]",
+        title: "Maestro",
         description:
-          "[One line on what it is and the impact — the kind of detail that earns a click.]",
-        tags: ["Next.js", "TypeScript", "Postgres"],
-        liveUrl: "https://example.com",
-        repoUrl: "https://github.com/[username]/[repo]",
-        image: { src: "/projects/project-1.jpg", alt: "[Screenshot of Flagship Project]", width: 1200, height: 750 },
+          "Run multiple CLI coding agents in parallel, each in its own isolated Git worktree, then review and merge their changes from a single desktop UI.",
+        tags: ["TypeScript", "Desktop App", "AI Agents"],
+        liveUrl:
+          "https://www.dropbox.com/scl/fi/inuqgz9tg0u1zkwdp4ino/Maestro-0.0.1-arm64.dmg?rlkey=s2j9jw6vl6zxecqycf5hg25lc&st=pw2p0w3u&dl=1",
+        repoUrl: "https://github.com/xOAviOx/maestro",
+        image: { src: "/projects/maestro.png", alt: "Maestro desktop UI showing parallel coding-agent workspaces and a live agent session", width: 3200, height: 2000 },
         featured: true,
       },
       {
-        title: "[Project Two]",
-        description: "[One-line description of what it does and for whom.]",
-        tags: ["React", "Tailwind"],
-        liveUrl: "https://example.com",
-        repoUrl: "https://github.com/[username]/[repo]",
-        image: { src: "/projects/project-2.jpg", alt: "[Screenshot of Project Two]", width: 1200, height: 750 },
+        title: "Gantry",
+        description:
+          "A single-node mini-PaaS: push a repo and get a running app on its own subdomain, with live build logs, zero-downtime deploys, encrypted secrets, and a self-healing control plane.",
+        tags: ["Go", "PaaS", "DevOps"],
+        repoUrl: "https://github.com/xOAviOx/gantry",
+        image: { src: "/projects/gantry.jpg", alt: "Gantry deployment view streaming live build logs through its deploy pipeline", width: 2880, height: 2570 },
       },
       {
-        title: "[Project Three]",
-        description: "[One-line description of what it does and for whom.]",
-        tags: ["Node", "Prisma"],
-        liveUrl: "https://example.com",
-        repoUrl: "https://github.com/[username]/[repo]",
-        image: { src: "/projects/project-3.jpg", alt: "[Screenshot of Project Three]", width: 1200, height: 750 },
+        title: "yap-lang",
+        description:
+          "A beginner-friendly toy language whose keywords are Gen-Z slang, with a real lexer, parser, and tree-walking interpreter plus a zero-install browser playground.",
+        tags: ["TypeScript", "Interpreter", "Language Design"],
+        liveUrl: "https://xoaviox.github.io/yap-lang/",
+        repoUrl: "https://github.com/xOAviOx/yap-lang",
       },
       {
-        title: "[Project Four]",
-        description: "[One-line description of what it does and for whom.]",
-        tags: ["Python", "FastAPI"],
-        repoUrl: "https://github.com/[username]/[repo]",
-        image: { src: "/projects/project-4.jpg", alt: "[Screenshot of Project Four]", width: 1200, height: 750 },
+        title: "AI Hedge Fund",
+        description:
+          "Hedge-fund-level tools for everyday investors: real-time market data, multi-agent AI analysis, and advanced charting in one unified platform.",
+        tags: ["Python", "FastAPI", "Next.js"],
+        repoUrl: "https://github.com/xOAviOx/ai-hedge-fund",
+        image: { src: "/projects/ai-hedge-fund.png", alt: "AI Hedge Fund console showing NAV, P&L, positions, and AI-generated order decisions", width: 2880, height: 2570 },
+      },
+      {
+        title: "ArenaIQ",
+        description:
+          "A real-time 1v1 math battle app for JEE/NEET students. Think Chess.com, but for competitive-exam questions.",
+        tags: ["TypeScript", "Real-time", "EdTech"],
+        liveUrl: "https://arena-iq-web.vercel.app",
+        repoUrl: "https://github.com/xOAviOx/arenaIQ",
+      },
+      {
+        title: "Optera",
+        description:
+          "Connects to an Indian trader's broker, reads their live F&O positions, computes real-time risk, and adds an AI co-pilot that explains it in plain Hinglish.",
+        tags: ["Python", "FinTech", "AI"],
+        repoUrl: "https://github.com/xOAviOx/optera",
+      },
+      {
+        title: "aicut",
+        description:
+          "A local, desktop-class video editor that treats the transcript as the timeline. Cut by editing words or by describing what you want, with instant previews and no re-render.",
+        tags: ["Python", "Desktop App", "AI Video"],
+        repoUrl: "https://github.com/xOAviOx/aicut",
+        image: { src: "/projects/aicut.png", alt: "aicut editor showing a video with its transcript as the editable timeline", width: 2880, height: 1800 },
+      },
+      {
+        title: "Folio",
+        description:
+          "Turn a résumé into a beautiful personal website in about two minutes.",
+        tags: ["TypeScript", "Next.js", "Web App"],
+        liveUrl: "https://folio-gamma-navy.vercel.app",
+        repoUrl: "https://github.com/xOAviOx/folio",
       },
     ],
   },
