@@ -13,7 +13,7 @@ export function Hero() {
   const { hero } = site;
 
   return (
-    <section aria-label="Introduction" className="relative">
+    <section aria-label="Introduction" className="relative pb-12 sm:pb-16">
       {hero.banner && (
         <div className="relative h-40 w-full overflow-hidden sm:h-52">
           <Image
@@ -92,38 +92,46 @@ export function Hero() {
           <SocialLinks exclude={["email"]} />
         </div>
 
-        <p className="reveal prose-body mt-6 max-w-prose" style={step(4)}>
-          <span className="font-medium text-ink">{hero.headline} </span>
-          <RichText value={hero.intro} />
-        </p>
+        {(hero.headline || hero.intro) && (
+          <p className="reveal prose-body mt-6 max-w-prose" style={step(4)}>
+            {hero.headline && (
+              <span className="font-medium text-ink">{hero.headline} </span>
+            )}
+            {hero.intro && <RichText value={hero.intro} />}
+          </p>
+        )}
 
-        <div className="reveal mt-7 flex flex-wrap items-center gap-3" style={step(5)}>
-          <a
-            href={hero.primaryCta.href}
-            className="btn btn-primary"
-            {...(/^https?:\/\//.test(hero.primaryCta.href)
-              ? { target: "_blank", rel: "noreferrer noopener" }
-              : {})}
-          >
-            {hero.primaryCta.label}
-          </a>
-          {hero.secondaryCta && (
-            <a
-              href={hero.secondaryCta.href}
-              className="group inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-ink"
-              {...(hero.secondaryCta.external
-                ? { target: "_blank", rel: "noreferrer noopener" }
-                : {})}
-            >
-              {hero.secondaryCta.label}
-              <ArrowUpRight
-                width={14}
-                height={14}
-                className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              />
-            </a>
-          )}
-        </div>
+        {(hero.primaryCta || hero.secondaryCta) && (
+          <div className="reveal mt-7 flex flex-wrap items-center gap-3" style={step(5)}>
+            {hero.primaryCta && (
+              <a
+                href={hero.primaryCta.href}
+                className="btn btn-primary"
+                {...(/^https?:\/\//.test(hero.primaryCta.href)
+                  ? { target: "_blank", rel: "noreferrer noopener" }
+                  : {})}
+              >
+                {hero.primaryCta.label}
+              </a>
+            )}
+            {hero.secondaryCta && (
+              <a
+                href={hero.secondaryCta.href}
+                className="group inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-ink"
+                {...(hero.secondaryCta.external
+                  ? { target: "_blank", rel: "noreferrer noopener" }
+                  : {})}
+              >
+                {hero.secondaryCta.label}
+                <ArrowUpRight
+                  width={14}
+                  height={14}
+                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+              </a>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

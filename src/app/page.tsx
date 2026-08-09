@@ -1,6 +1,6 @@
 import { Hero } from "@/components/sections/Hero";
-import { BannerQuote } from "@/components/sections/BannerQuote";
 import { Story } from "@/components/sections/Story";
+import { Experience } from "@/components/sections/Experience";
 import { Projects } from "@/components/sections/Projects";
 import { Sponsors } from "@/components/sections/Sponsors";
 import { Stack } from "@/components/sections/Stack";
@@ -12,8 +12,8 @@ export default function Home() {
   return (
     <main id="main">
       <Hero />
-      <BannerQuote />
       <Story />
+      <Experience />
       <Projects />
       <Sponsors />
       <Stack />
