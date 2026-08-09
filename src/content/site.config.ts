@@ -259,13 +259,13 @@ export const site: SiteConfig = {
       width: 96,
       height: 96,
     },
-    banner: {
-      src: "/hero-banner.jpg",
-      alt: "", // decorative background image
-      width: 1200,
-      height: 480,
-    },
-    bannerQuote: "The best way to predict the future is to invent it. — Alan Kay",
+    headline:
+      "I build the whole thing: the part you see, the backend behind it, and the infrastructure keeping it up.",
+    intro: [
+      "These days that mostly means developer tooling, infrastructure, and putting AI into production. I run engineering at ",
+      { text: "Sunniva AI", href: "https://sunniva.info" },
+      ".",
+    ],
     availability: {
       available: true,
       label: "Available for select work",
@@ -541,35 +541,34 @@ export const site: SiteConfig = {
 
   github: {
     label: "GitHub Contributions",
-    username: "[username]",
+    username: "xOAviOx",
     revalidateSeconds: 60 * 60 * 6, // 6 hours
   },
 
   blog: {
     label: "Writing",
-    description: "[Occasional notes on building, design, and the work.]",
+    description: "Notes on the hard parts of the things I build.",
     maxInline: 4,
   },
 
   contact: {
     label: "Let's connect",
-    headline: "[If you've read this far, you might like what I do.]",
+    headline: "If you got this far, we should probably talk.",
     description: [
-      "[One line inviting the right kind of message — a project, a role, or just to trade notes.] Reach me at ",
-      { text: "[you@example.com]", href: "mailto:[you@example.com]" },
+      "I'm most interested in teams building something genuinely hard, and in people shipping their own tools and systems. If that's you, or you just want to trade notes on orchestration, infra, or putting models into production, send a note. I read everything. Reach me at ",
+      { text: "avishuklawork@gmail.com", href: "mailto:avishuklawork@gmail.com" },
       ".",
     ],
-    email: "[you@example.com]",
-    cta: { label: "Book a free call", href: "mailto:[you@example.com]" },
+    email: "avishuklawork@gmail.com",
+    cta: { label: "Book a call", href: "https://calendly.com/avishuklawork/30min" },
   },
 
   footer: {
     note: "© {year} Avi Shukla. All rights reserved.",
-    builtWith: "Built with Next.js & Tailwind. Deployed on Vercel.",
     links: [
       { label: "GitHub", href: "https://github.com/xOAviOx", external: true },
       { label: "LinkedIn", href: "https://www.linkedin.com/in/avi-shukla-ba24a6213/", external: true },
-      { label: "Email", href: "mailto:avishuklacode@gmail.com" },
+      { label: "Email", href: "mailto:avishuklawork@gmail.com" },
     ],
   },
 };
