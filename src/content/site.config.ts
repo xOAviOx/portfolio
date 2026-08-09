@@ -296,44 +296,91 @@ export const site: SiteConfig = {
 
   experience: {
     label: "Experience",
-    description: "[A short line framing your work history below.]",
     items: [
       {
-        role: "[Senior Software Engineer]",
-        company: "[Company Name]",
-        companyUrl: "https://example.com",
-        period: "2024 — Present",
-        location: "[Remote]",
+        role: "Co-Founder",
+        company: "Sunniva AI",
+        companyUrl: "https://sunniva.info",
+        period: "Feb 2025 — Present",
+        location: "Remote",
         description:
-          "[One or two lines on your scope, the team, and what you own — the shape of the role.]",
+          "Part of the founding team at Sunniva AI, working across technical implementation, business operations, client acquisition, recruitment, and project delivery.",
         highlights: [
-          "[A concrete, measurable win — shipped X that did Y, moving a metric by Z%.]",
-          "[Another highlight that shows range — led, built, or scaled something.]",
+          "Built and deployed AI voice agents and automation workflows handling real calls in production.",
+          "Coordinated across sales, recruitment, client delivery, and technical implementation as an early-stage team.",
+          "Helping businesses improve lead handling, customer support, and operational efficiency through AI-powered automation.",
         ],
-        tags: ["TypeScript", "Next.js", "AWS"],
+        tags: ["AI", "Voice Agents", "Automation", "Node.js", "Python"],
       },
       {
-        role: "[Software Engineer]",
-        company: "[Previous Company]",
-        companyUrl: "https://example.com",
-        period: "2022 — 2024",
-        location: "[City, Country]",
+        role: "Back End Developer",
+        company: "Stealth Startup",
+        period: "Mar 2025 — May 2025",
+        location: "Remote",
         description:
-          "[What you worked on and the impact you had — one or two lines.]",
+          "Built and maintained backend systems for an early-stage stealth startup, working closely with a small founding team to ship quickly.",
         highlights: [
-          "[A concrete achievement with a number attached.]",
-          "[A second highlight worth remembering.]",
+          "Developed backend services and APIs using Node.js and Python, powering the product's core functionality.",
+          "Designed and managed data layers with PostgreSQL for relational storage and Redis for caching, sessions, and fast lookups.",
+          "Built scalable, reliable server-side infrastructure to support the product as it grows.",
         ],
-        tags: ["React", "Node", "Postgres"],
+        tags: ["Node.js", "Python", "PostgreSQL", "Redis"],
       },
       {
-        role: "[Junior Software Engineer]",
-        company: "[First Company]",
-        period: "2021 — 2022",
-        location: "[City, Country]",
+        role: "Co-Founder",
+        company: "Type7Web",
+        period: "Aug 2023 — Dec 2024",
+        location: "Remote",
         description:
-          "[Where you started and what you learned — one line is enough.]",
-        tags: ["JavaScript", "Python"],
+          "Founded and ran Type7Web, a web design and development agency helping businesses establish and grow their online presence — end-to-end from design and build to launch.",
+        highlights: [
+          "Designed and developed custom websites for clients across industries, handling everything from layout and copy to deployment.",
+          "Created and sold a library of website templates, turning one-off design work into a repeatable, scalable product.",
+          "Handled the full client lifecycle solo: sales, design, development, and delivery.",
+        ],
+        tags: ["Next.js", "React", "Tailwind CSS", "Figma"],
+      },
+      {
+        role: "Frontend Developer Intern",
+        company: "KR GROUP LTD",
+        period: "Mar 2023 — Jul 2023",
+        location: "Remote",
+        description:
+          "Built frontend interfaces and contributed to web development projects across a part-time internship.",
+        tags: ["Web Development", "Python", "JavaScript"],
+      },
+      {
+        role: "Full Stack Developer",
+        company: "Dendrite AI",
+        period: "Mar 2023 — May 2023",
+        location: "Remote",
+        description:
+          "Designed and implemented end-to-end features across the frontend and backend for scalable web applications.",
+        highlights: [
+          "Built modular, reusable UI components and ensured responsiveness across devices.",
+        ],
+        tags: ["Next.js", "React.js", "Full Stack"],
+      },
+      {
+        role: "Web Development Intern",
+        company: "Techniera Incorporation",
+        period: "Sep 2022 — Nov 2022",
+        location: "Remote",
+        description:
+          "Translated design requirements into clean, responsive, and functional web pages.",
+        highlights: [
+          "Improved website usability and performance through debugging and optimisation.",
+        ],
+        tags: ["HTML5", "CSS", "JavaScript", "Full-Stack Development"],
+      },
+      {
+        role: "Full-Stack Developer",
+        company: "Massold Technologies",
+        period: "Mar 2022 — May 2022",
+        location: "Remote",
+        description:
+          "Built and optimised both frontend and backend features using modern JavaScript technologies, integrated APIs and handled database operations.",
+        tags: ["JavaScript", "Node.js", "APIs"],
       },
     ],
   },
