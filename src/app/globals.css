@@ -27,7 +27,7 @@
 
   /* Fluid display sizes → generate .text-display and .text-quote utilities. */
   --text-display: clamp(2rem, 1.1rem + 4vw, 3rem);
-  --text-quote: clamp(2.15rem, 1rem + 5.2vw, 4.4rem);
+  --text-quote: clamp(1.6rem, 0.9rem + 3.4vw, 3rem);
 
   --radius-card: 16px;
 

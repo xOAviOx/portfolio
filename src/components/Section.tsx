@@ -24,7 +24,7 @@ export function Section({
   return (
     <section
       id={id}
-      className={`px-6 py-14 sm:px-10 sm:py-16 ${
+      className={`px-6 py-11 sm:px-10 sm:py-12 ${
         divider ? "border-t border-line" : ""
       }`}
       aria-labelledby={id && label ? `${id}-label` : undefined}
