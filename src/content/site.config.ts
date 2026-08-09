@@ -83,23 +83,17 @@ export interface Hero {
   /** Small line under the name, e.g. "Age • Role". */
   meta: string;
   /** One-line role / positioning statement. */
-  headline: string;
+  headline?: string;
   /** Intro paragraph, with optional inline links. */
-  intro: RichText;
+  intro?: RichText;
   avatar: ImageRef;
   /** Optional full-bleed banner image behind the top of the hero. */
   banner?: ImageRef;
   /** Optional quote overlaid on the banner image. */
   bannerQuote?: string;
   availability: Availability;
-  primaryCta: Link;
+  primaryCta?: Link;
   secondaryCta?: Link;
-}
-
-export interface BannerQuote {
-  text: string;
-  /** Optional attribution / source. */
-  cite?: string;
 }
 
 export interface Story {
@@ -107,6 +101,28 @@ export interface Story {
   label: string;
   paragraphs: RichText[];
   resume?: Link;
+}
+
+export interface ExperienceItem {
+  role: string;
+  company: string;
+  /** Optional link to the company / employer. */
+  companyUrl?: string;
+  /** Human-readable range, e.g. "2024 — Present". */
+  period: string;
+  location?: string;
+  description?: string;
+  /** Optional achievement bullets. */
+  highlights?: string[];
+  /** Optional tech / skill tags. */
+  tags?: string[];
+}
+
+export interface ExperienceSection {
+  label: string;
+  description?: string;
+  /** Empty array → the whole section is hidden. */
+  items: ExperienceItem[];
 }
 
 export interface Project {
@@ -199,8 +215,8 @@ export interface SiteConfig {
   /** Shown in the header icon row and reused in Contact. */
   socials: Social[];
   hero: Hero;
-  bannerQuote: BannerQuote;
   story: Story;
+  experience: ExperienceSection;
   projects: ProjectsSection;
   sponsors: SponsorsSection;
   stack: StackSection;
@@ -216,38 +232,30 @@ export interface SiteConfig {
 
 export const site: SiteConfig = {
   meta: {
-    name: "[Your Name]",
-    title: "[Your Name] — [Role]",
+    name: "Avi Shukla",
+    title: "Avi Shukla — Software Engineer | AI-Native Builder",
     description:
       "[One or two sentences describing who you are and what you build. This is your search + social preview text.]",
     url: "https://example.com",
     locale: "en_US",
-    ogAlt: "[Your Name] — [Role]",
+    ogAlt: "Avi Shukla — Software Engineer | AI-Native Builder",
     twitter: "@yourhandle",
   },
 
   socials: [
-    { platform: "github", label: "GitHub", href: "https://github.com/[username]", handle: "@[username]" },
-    { platform: "linkedin", label: "LinkedIn", href: "https://linkedin.com/in/[username]" },
-    { platform: "x", label: "X", href: "https://x.com/[username]", handle: "@[username]" },
-    { platform: "email", label: "Email", href: "mailto:[you@example.com]" },
-    { platform: "resume", label: "Résumé", href: "/resume.pdf" },
+    { platform: "github", label: "GitHub", href: "https://github.com/xOAviOx", handle: "@xOAviOx" },
+    { platform: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/in/avi-shukla-ba24a6213/" },
+    { platform: "x", label: "X", href: "https://x.com/CircuitSage_", handle: "@CircuitSage_" },
+    { platform: "email", label: "Email", href: "mailto:avishuklacode@gmail.com" },
+    { platform: "resume", label: "Résumé", href: "/resume.pdf", external: true },
   ],
 
   hero: {
-    name: "[Your Name]",
-    meta: "[Age] • [Short role, e.g. Founder of Acme]",
-    headline: "[A one-line positioning statement people remember you by.]",
-    intro: [
-      "[Open with a sharp sentence about what you do.] Currently building ",
-      { text: "[Project A]", href: "https://example.com" },
-      " and ",
-      { text: "[Project B]", href: "https://example.com" },
-      ". [Add a couple of lines about the kind of work you take on, who it helps, and the outcome you aim for — enough to give a reader the shape of you without a wall of text.]",
-    ],
+    name: "Avi Shukla",
+    meta: "Software Engineer | AI-Native Builder",
     avatar: {
-      src: "/avatar.jpg",
-      alt: "[Portrait of Your Name]",
+      src: "/profile_photo.png",
+      alt: "Portrait of Avi Shukla",
       width: 96,
       height: 96,
     },
@@ -257,36 +265,77 @@ export const site: SiteConfig = {
       width: 1200,
       height: 480,
     },
-    bannerQuote: "[A short line that sets the tone for the whole site.]",
+    bannerQuote: "The best way to predict the future is to invent it. — Alan Kay",
     availability: {
       available: true,
       label: "Available for select work",
     },
-    primaryCta: { label: "Book a call", href: "mailto:[you@example.com]" },
-    secondaryCta: { label: "View résumé", href: "/resume.pdf", external: true },
-  },
-
-  bannerQuote: {
-    text: "[One pulled quote, treated as a typographic moment — a line that captures how you think about your craft.]",
-    cite: undefined,
   },
 
   story: {
     label: "About",
     paragraphs: [
       [
-        "[First paragraph — the throughline of your work. What problem you keep coming back to, and why it matters to you.]",
+        "I build things people actually use, and I tend to build the whole thing, the part you see, the backend behind it, and the infrastructure keeping it up. I've learned the hard way that the problems worth solving usually hide where those pieces meet.",
       ],
       [
-        "[Second paragraph — how you work, or a turning point that shaped your approach. Reference ",
-        { text: "a project", href: "https://example.com" },
-        " or moment that made it concrete.]",
+        "That's what keeps pulling me toward the harder stuff: ",
+        { text: "orchestration tooling", href: "https://github.com/xOAviOx/maestro" },
+        ", a ",
+        { text: "self-hosted PaaS", href: "https://github.com/xOAviOx/gantry" },
+        ", ",
+        { text: "voice systems", href: "https://sunniva.info" },
+        " handling real calls in production. Some of it ships commercially through Sunniva AI, where I run the engineering.",
       ],
       [
-        "[Optional third paragraph — where you are now and where you're headed.]",
+        "I'm looking for a team working on something genuinely hard, where you own what you build and it actually reaches people.",
       ],
     ],
     resume: { label: "Download résumé", href: "/resume.pdf", external: true },
+  },
+
+  experience: {
+    label: "Experience",
+    description: "[A short line framing your work history below.]",
+    items: [
+      {
+        role: "[Senior Software Engineer]",
+        company: "[Company Name]",
+        companyUrl: "https://example.com",
+        period: "2024 — Present",
+        location: "[Remote]",
+        description:
+          "[One or two lines on your scope, the team, and what you own — the shape of the role.]",
+        highlights: [
+          "[A concrete, measurable win — shipped X that did Y, moving a metric by Z%.]",
+          "[Another highlight that shows range — led, built, or scaled something.]",
+        ],
+        tags: ["TypeScript", "Next.js", "AWS"],
+      },
+      {
+        role: "[Software Engineer]",
+        company: "[Previous Company]",
+        companyUrl: "https://example.com",
+        period: "2022 — 2024",
+        location: "[City, Country]",
+        description:
+          "[What you worked on and the impact you had — one or two lines.]",
+        highlights: [
+          "[A concrete achievement with a number attached.]",
+          "[A second highlight worth remembering.]",
+        ],
+        tags: ["React", "Node", "Postgres"],
+      },
+      {
+        role: "[Junior Software Engineer]",
+        company: "[First Company]",
+        period: "2021 — 2022",
+        location: "[City, Country]",
+        description:
+          "[Where you started and what you learned — one line is enough.]",
+        tags: ["JavaScript", "Python"],
+      },
+    ],
   },
 
   projects: {
@@ -396,12 +445,12 @@ export const site: SiteConfig = {
   },
 
   footer: {
-    note: "© {year} [Your Name]. All rights reserved.",
+    note: "© {year} Avi Shukla. All rights reserved.",
     builtWith: "Built with Next.js & Tailwind. Deployed on Vercel.",
     links: [
-      { label: "GitHub", href: "https://github.com/[username]", external: true },
-      { label: "LinkedIn", href: "https://linkedin.com/in/[username]", external: true },
-      { label: "Email", href: "mailto:[you@example.com]" },
+      { label: "GitHub", href: "https://github.com/xOAviOx", external: true },
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/avi-shukla-ba24a6213/", external: true },
+      { label: "Email", href: "mailto:avishuklacode@gmail.com" },
     ],
   },
 };
