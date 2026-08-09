@@ -230,13 +230,31 @@ export interface SiteConfig {
  *  CONTENT — edit everything below.
  * ==========================================================================*/
 
+/**
+ * Absolute site origin, used for canonical URLs, OG/Twitter image URLs,
+ * sitemap.xml, and robots.txt. Resolved in priority order so no manual
+ * edit is needed on Vercel:
+ *   1. NEXT_PUBLIC_SITE_URL — set this when you point a custom domain here.
+ *   2. VERCEL_PROJECT_PRODUCTION_URL — Vercel injects your stable production
+ *      *.vercel.app domain at build time, so the default deploy just works.
+ *   3. http://localhost:3000 — local dev fallback.
+ * Only ever read in server contexts (metadata, sitemap, robots, OG image).
+ */
+const siteUrl =
+  // `||` (not `??`) so an empty-string env var falls through instead of
+  // resolving to "" and crashing `new URL("")`.
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "http://localhost:3000");
+
 export const site: SiteConfig = {
   meta: {
     name: "Avi Shukla",
     title: "Avi Shukla — Software Engineer | AI-Native Builder",
     description:
       "Avi Shukla is a software engineer who builds full-stack products end to end: frontend, backend, and the infrastructure underneath. Creator of Maestro, Gantry, and aicut; engineering at Sunniva AI.",
-    url: "https://example.com",
+    url: siteUrl,
     locale: "en_US",
     ogAlt: "Avi Shukla — Software Engineer | AI-Native Builder",
     twitter: "@CircuitSage_",
