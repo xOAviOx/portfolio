@@ -1,0 +1,54 @@
+---
+title: "The transcript is the timeline"
+description: "Letting a language model edit video by editing words, without letting it invent a single timestamp."
+date: "2026-07-24"
+tags: ["aicut", "llm", "whisper"]
+published: true
+---
+
+aicut is a video editor where you edit the words, not the clip. It transcribes what you said, shows you the transcript, and when you delete a sentence from the transcript it deletes that piece of footage. You can also just tell it what you want in plain language: cut the filler words, tighten the intro, make it vertical for shorts.
+
+The whole thing rests on one decision that took me longer than I'd like to admit to get right. The language model is never allowed to produce a timestamp.
+
+## Why timestamps are poison
+
+The naive design is tempting. You've got a transcript with times attached, so you hand it to the model and ask it to return the start and end seconds of the parts to keep. It works in the demo, and then it quietly betrays you. Models are fluent at producing numbers that look correct. It'll give you `12.84` when the real cut is at `13.20`, and you won't notice until the export is a frame off on every edit and the audio clips a word in half. A hallucinated timestamp is indistinguishable from a real one right up until you play it back.
+
+So I took timestamps away from the model completely.
+
+## Word ids, not seconds
+
+When aicut transcribes audio it uses faster-whisper with word-level timestamps. Every word gets a stable id and a real start and end time measured from the actual waveform:
+
+```json
+{ "id": 417, "word": "basically", "start": 22.10, "end": 22.63 }
+```
+
+The model never sees seconds and never emits them. It sees words and their ids. When it wants to make an edit, it returns a typed plan that refers to words by id:
+
+```json
+{
+  "ops": [
+    { "type": "delete", "from_word": 417, "to_word": 419 },
+    { "type": "delete", "from_word": 588, "to_word": 588 }
+  ]
+}
+```
+
+That plan gets validated against a strict schema before anything touches the video. Malformed JSON, a word id that doesn't exist, a range that runs backwards: all rejected, and the model is asked again. It physically cannot express an edit that points at a time that isn't real, because it isn't allowed to talk about time at all. The worst it can do is pick the wrong word, and a wrong word is a visible, recoverable mistake in a way that a hallucinated float never is.
+
+Turning a plan into actual cut ranges is pure and deterministic. Word ids map to their timestamps, adjacent kept ranges get merged, and out comes a list of intervals to play. Same plan in, same cut out, every time. The nondeterministic part, the model, produces something small and checkable. The part that touches the video is boring arithmetic.
+
+## Preview without rendering
+
+The other thing I refused to accept was waiting on a render to see an edit. If deleting a word means thirty seconds of FFmpeg, the whole "edit it like a document" feeling is dead on arrival.
+
+So preview never renders anything. It plays the original media and skips. The player holds the compiled list of kept intervals, and as it plays it jumps over the gaps. Delete a word and the interval list recomputes, so the next frame of playback already reflects the cut. Nothing is encoded until you actually export. That's the whole difference between an editor that feels like a text box and one that feels like homework.
+
+Export is where the real encode happens. FFmpeg cuts the kept ranges, and depending on what you asked for it burns in captions from the same word timestamps, reframes to 9:16 by tracking the speaker, and encodes on the GPU with NVENC. Progress streams back over SSE so the UI shows a real bar instead of a spinner that's lying to you.
+
+## The pattern underneath
+
+The lesson generalized well past this project. When you put a model in the loop, decide exactly what it's allowed to say, and make everything it says cheap to verify. The model in aicut has an almost insultingly small job: read words, point at them. Every hard guarantee, timestamps are real, ranges are valid, the same edit always produces the same video, lives in the deterministic code around it.
+
+Give the model a narrow, typed vocabulary. Validate all of it. Keep the irreversible, precise work on the deterministic side of the line. The model proposes in a language where it can't even phrase a dangerous mistake, and the code decides what actually happens.

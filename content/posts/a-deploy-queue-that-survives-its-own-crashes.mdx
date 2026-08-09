@@ -1,0 +1,63 @@
+---
+title: "A deploy queue that survives its own crashes"
+description: "How Gantry runs a whole mini-PaaS off a single Postgres table, and why the queue is the only part that really matters."
+date: "2026-07-09"
+tags: ["gantry", "go", "postgres"]
+published: true
+---
+
+Gantry is a platform-as-a-service that runs on one box. You `git push`, and a few seconds later your app is live on its own subdomain with a real TLS certificate. It's the kind of thing Heroku made look effortless and that turns out to have a dozen sharp edges the moment you build it yourself.
+
+The piece worth writing about is the queue, because that's where every failure mode lives.
+
+## Why the queue is the hard part
+
+A deploy is a chain of slow, failure-prone steps: clone the pushed commit, build a Docker image, start a container, health-check it, flip traffic to it, retire the old one. Any step can hang or die. The machine can lose power halfway through. If your system forgets a job the instant the worker running it crashes, you're left with half-built images and containers that are running but that nothing routes to.
+
+So the requirement was never "run jobs." It was "never lose a job, even when the process running it vanishes."
+
+## Postgres instead of a broker
+
+The reflex answer is Redis, or a real broker like RabbitMQ. I didn't want one. Gantry already needs Postgres for its own state, and standing up a second stateful service on a single-node box is exactly the operational weight I was trying to avoid. So the queue is a table.
+
+The thing that makes this actually work is `FOR UPDATE SKIP LOCKED`. A worker claims a job like this:
+
+```sql
+UPDATE jobs
+SET status = 'running', worker_id = $1, heartbeat = now()
+WHERE id = (
+  SELECT id FROM jobs
+  WHERE status = 'queued'
+  ORDER BY created_at
+  FOR UPDATE SKIP LOCKED
+  LIMIT 1
+)
+RETURNING *;
+```
+
+`FOR UPDATE` locks the row it selects. `SKIP LOCKED` tells every other worker to ignore rows that are already locked instead of blocking on them. Ten workers can hammer this query at the same time and each one walks away with a different job, or with nothing, and no two ever grab the same one. No broker, no Lua scripts, nothing extra to monitor at 3am. Postgres was already running.
+
+## Crash recovery is one query
+
+Claiming a job stamps a `worker_id` and a heartbeat. Workers keep bumping that heartbeat while they run. A separate sweeper looks for jobs marked `running` whose heartbeat has gone stale and drops them back to `queued`:
+
+```sql
+UPDATE jobs SET status = 'queued', worker_id = NULL
+WHERE status = 'running' AND heartbeat < now() - interval '30 seconds';
+```
+
+That is the entire crash-recovery story. If a worker segfaults or the box reboots mid-deploy, its jobs stop heartbeating, the sweeper reclaims them, and another worker picks them up. The deploy retries from the top. That only works because every step is written to be idempotent: building the same commit produces the same tagged image, starting a container that already exists is a no-op. Retrying a half-finished deploy has to be safe, or none of the rest holds.
+
+## Blue/green, so a bad build can't take you down
+
+New versions never replace the running one in place. Gantry builds the new image, starts it as a second container, and only after it passes a health check does it rewrite the Caddy route to point at the new one. The old container stays alive for a while. Rollback is just pointing the route back, which is why it can be one click and effectively instant. The previous version is still sitting there, healthy, waiting.
+
+## The reconciliation loop
+
+The last piece is what makes it feel alive. A loop runs continuously, comparing desired state (what the database says should be running) against actual state (what Docker reports is running) and closing the gap. A container got OOM-killed? The loop starts it again. A route points at something that no longer exists? It repairs it.
+
+This is the idea Kubernetes is built on, shrunk to a single machine. I didn't set out to reimplement it. I kept hitting the same situation, a container dying overnight and me wanting it back without getting up, and every time the answer was "compare what should be true to what is true, then fix the difference." Eventually that loop becomes the spine of the whole system and the deploy queue is just one of the things feeding it work.
+
+Logs stream out over Server-Sent Events the entire time, so from the browser you watch a build the same way you'd watch it in a terminal. Secrets are encrypted at rest with AES-256-GCM, and the push endpoint verifies GitHub's HMAC signature before it does anything, because an unauthenticated deploy trigger is just an open door with a nice UI.
+
+None of the individual pieces are clever. The queue is a table. Recovery is a timestamp comparison. What made it reliable was assuming every step would eventually fail, and making sure the system could pick itself back up when it did.

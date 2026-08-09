@@ -1,0 +1,50 @@
+---
+title: "One worktree per agent"
+description: "Running several coding agents against the same repo without letting them corrupt each other, and the process boundary that stops the whole thing from being a security hole."
+date: "2026-08-04"
+tags: ["maestro", "electron", "git"]
+published: true
+---
+
+I started building Maestro because I kept doing the same thing by hand and hating it. I'd open three terminals, start a coding agent in each, and try to keep them working on different parts of the repo so they wouldn't step on each other. It held together until it didn't. Two agents would touch the same file, one would write over a half-finished edit from the other, and git would land in a state where I couldn't tell whose work was whose.
+
+The root problem is simple once you say it out loud. A git repository has exactly one working directory and one index. Point two processes at it, let them both write, and you don't get parallelism. You get a race.
+
+## Worktrees, not clones
+
+The obvious fix is to give each agent its own copy of the repo. Cloning works, but it's heavy. You duplicate the whole object database every time, and now you have N repositories that don't share history. When an agent finishes, getting its branch back into main means adding remotes and pushing between clones. It turns into plumbing you have to babysit.
+
+Git already ships the right primitive: `git worktree`. A worktree is a second working directory attached to the same repository. It shares the object store but gets its own checked-out branch, its own index, and its own files on disk. So when you start an agent in Maestro, it gets a fresh worktree on a branch named after the task:
+
+```
+git worktree add .maestro/wt/signup-validation -b maestro/signup-validation
+```
+
+Now three agents run at once, each looking at a clean, isolated checkout. They can't corrupt each other because they're editing different directories, but they all share one `.git`, so merging a finished branch is an ordinary local merge. No remotes, no copying gigabytes around.
+
+Cleanup is the part nobody warns you about. If you delete a worktree with `rm -rf`, git keeps a dangling administrative record and starts nagging you about a worktree it thinks still exists. You have to tear it down through git so it prunes its own bookkeeping. I found that out the boring way, by ending up with a `.git/worktrees` directory full of ghosts I had to `prune` out.
+
+## The part that actually took the time
+
+Isolating the agents from each other was the easy half. The half that ate my week was the process architecture, because Maestro is an Electron app, and Electron is a footgun if you're not deliberate.
+
+The renderer is the UI. It runs web code. The rule I refused to break is that the renderer never touches the filesystem, never runs git, and never spawns a process. Every dangerous capability lives in the main process, and the renderer can only ask for it across a typed bridge.
+
+In practice that means context isolation is on, node integration is off, and the preload script exposes a small, explicit API through `contextBridge`. Everything that crosses the boundary gets validated with Zod before the main process acts on it:
+
+```ts
+ipcMain.handle("agent:start", (_e, raw) => {
+  const { repoPath, task } = AgentStartSchema.parse(raw);
+  return supervisor.start(repoPath, task);
+});
+```
+
+That `.parse` call is the whole point. If the renderer, or something that has managed to compromise the renderer, sends a malformed or hostile payload, it dies at the door with a schema error instead of reaching `child_process.spawn` with an argument I never intended. The IPC surface stays small enough that I can read every handler in one sitting and know exactly what the untrusted side is allowed to ask for. A big, vague IPC layer is where these apps get owned.
+
+## Watching them work
+
+Each agent runs in a real pty, node-pty on the backend wired to xterm.js in the UI, so you see live output the way you would in a terminal instead of a summary after the fact. When an agent finishes, you don't squint at a text diff. You open a Monaco diff of its worktree against main and either keep the work or throw it away. Keeping it merges the branch. Throwing it away removes the worktree and deletes the branch, bookkeeping included.
+
+Underneath, the scheduler is a DAG. Tasks that depend on each other run in order, independent ones run in parallel up to a concurrency cap, and a supervisor tracks each agent's lifecycle so a crashed agent doesn't leave a zombie worktree behind.
+
+Almost none of this is exotic. Worktrees have been in git for years, Zod is boring on purpose, ptys are ancient. The actual work was deciding where the lines go: one working directory per agent, one process allowed to touch the machine, and one validated door between the UI and everything that can hurt you.
