@@ -301,7 +301,7 @@ export const site: SiteConfig = {
         role: "Co-Founder",
         company: "Sunniva AI",
         companyUrl: "https://sunniva.info",
-        period: "Feb 2025 — Present",
+        period: "Mar 2025 — Present",
         location: "Remote",
         description:
           "Part of the founding team at Sunniva AI, working across technical implementation, business operations, client acquisition, recruitment, and project delivery.",
